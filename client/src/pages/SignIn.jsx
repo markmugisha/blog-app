@@ -1,11 +1,14 @@
 import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux"; //for dispatching actions signInstart etc. useSelector to select error state from userSlice.js
+import { signInStart, signInSuccess, signInFailure } from "../redux/user/userSlice";
 
 const SignIn = () => {
   const [formData, setFormData] = useState({});
-  const [errorMessage, setErrorMessage] = useState(null);
-  const [loading, setLoading] = useState(false);
+  //sets error from userSlice initial state to errorMessage used at the end of UI code.
+  const {loading, error: errorMessage} = useSelector((state) => state.user);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -16,11 +19,15 @@ const SignIn = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.email || !formData.password) {
-      return setErrorMessage('Please fill out all fields.');
+      return dispatch(signInFailure('All fields are required'));
     }
     try {
-      setLoading(true);
-      setErrorMessage(null);
+      /*These two are replaced by dispatching signInStart as it is defined in userSlice.js defining both setLoading and setErrorMessage. Same for all.
+          setLoading(true);
+          setErrorMessage(null); 
+      */
+
+      dispatch(signInStart());
       const res = await fetch('/api/auth/signin', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -28,15 +35,15 @@ const SignIn = () => {
       });
       const data = await res.json();
       if (data.success === false) {
-        return setErrorMessage(data.message);
+        dispatch(signInFailure(data.message));//data.message === action.payload
       }
-      setLoading(false);
+
       if(res.ok) {
+        dispatch(signInSuccess(data));//data === action.payload in userSlice.js
         navigate('/');
       }
     } catch (error) {
-      setErrorMessage(error.message);
-      setLoading(false);
+      dispatch(signInFailure(error.message));//error.message === action.payload
     }
   };
   
@@ -78,17 +85,17 @@ const SignIn = () => {
               />
             </div>
             <Button
-              gradientDuoTone="purpleToPink"
-              type="submit"
+              gradientDuoTone='purpleToPink'
+              type='submit'
               disabled={loading}
             >
               {loading ? (
                 <>
-                  <Spinner size="sm" />
-                  <span className="pl-3">Loading...</span>
+                  <Spinner size='sm' />
+                  <span className='pl-3'>Loading...</span>
                 </>
               ) : (
-                "Sign In"
+                'Sign In'
               )}
             </Button>
           </form>

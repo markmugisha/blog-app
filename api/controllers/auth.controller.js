@@ -54,7 +54,7 @@ export const signin = async (req, res, next) => {
     //authenticating the user
     const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
 
-    //removing the password from the user object so that it is not sent to the client
+    //removing the password from the user object so that it is not sent to the client and returning the "rest" of the user data.
     const {password: passiwadi, ...rest} = validUser._doc;
 
     //cookie is the encrypted value of the id of the user
@@ -63,7 +63,7 @@ export const signin = async (req, res, next) => {
       .cookie("access_token", token, { 
         httpOnly: true,
       })
-      .json(rest);
+      .json(rest);//this "rest" - used as the payload in our reducers in userSlice
   } catch (error) {
     next(error);
   }
