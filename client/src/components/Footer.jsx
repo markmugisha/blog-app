@@ -45,17 +45,17 @@ const FooterComp = () => {
               </Footer.LinkGroup>
             </div>
             <div>
-              <Footer.Title title="FOLLOWS US" />
+              <Footer.Title title="FOLLOW US" />
               <Footer.LinkGroup col>
                 <Footer.Link
                   href="https://github.com/markmugisha"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Portifolio
+                  Portfolio
                 </Footer.Link>
                 <Footer.Link
-                  href="upward and foward"
+                  href="upward and foward link"
                   target="_blank"
                   rel="noopener noreferrer"
                 >

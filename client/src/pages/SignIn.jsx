@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux"; //for dispatching actions signInstart etc. useSelector to select error state from userSlice.js
 import { signInStart, signInSuccess, signInFailure } from "../redux/user/userSlice";
+import OAuth from "../components/OAuth";
 
 const SignIn = () => {
   const [formData, setFormData] = useState({});
@@ -54,7 +55,7 @@ const SignIn = () => {
         <div className="flex-1">
           <Link to="/" className="text-4xl font-bold dark:text-white">
             <span className="px-2 py-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg text-white">
-              Marks
+              Your
             </span>
             Blog
           </Link>
@@ -79,7 +80,7 @@ const SignIn = () => {
               <Label value="Your password" />
               <TextInput
                 type="password"
-                placeholder="......"
+                placeholder=". . ."
                 id="password"
                 onChange={handleChange}
               />
@@ -98,6 +99,7 @@ const SignIn = () => {
                 'Sign In'
               )}
             </Button>
+            <OAuth />
           </form>
           <div className="flex gap-2 text-sm mt-5">
             <span>Do not have an account?</span>{" "}
